@@ -77,11 +77,20 @@ const scraper = (browser, url) =>
 
       const scrapeData = {}
 
+      const category = await newPage.$$eval("nav.breadcrumb >a  ", (els) => {
+        return els.map((el) => {
+          return el.innerText
+        }) // lấy tên danh mục
+        return category
+      })
+      scrapeData.category = category
+
       // lấy tên sản phẩm
       const name = await newPage.$eval("header.section-header", (el) => {
         return el.querySelector("h3")?.innerText
       })
       scrapeData.name = name
+      scrapeData.brand = name?.split(" ")[0] // Lấy tên thương hiệu từ tên sản phẩm
 
       // Lấy ảnh sp
       const thumb = await newPage.$eval("#ProductPhoto", (el) => {
